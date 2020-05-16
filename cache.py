@@ -32,7 +32,7 @@ def cache_test():
   cache = Cache(4)
   # Initially, no page is cached.
   equal(cache.get_pages(), [])
-  # Access "A".
+  # Access "A". Imagine that "A" means the pair of ("a.com", the page contents).
   cache.access_page("A")
   # "A" is cached.
   equal(cache.get_pages(), ["A"])
