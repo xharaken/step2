@@ -11,8 +11,8 @@ class Cache:
     ###########################
     pass
 
-  # Access a page and update the contents of the cache so that it stores
-  # the most recently accessed N pages. This needs to be done with mostly O(1).
+  # Access a page and update the cache so that it stores the most
+  # recently accessed N pages. This needs to be done with mostly O(1).
   # |url|: The accessed URL
   # |contents|: The contents of the URL
   def access_page(self, url, contents):
