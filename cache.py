@@ -9,21 +9,25 @@ class Cache:
     ###########################
     # Write your code here :) #
     ###########################
+    pass
 
   # Access a page and update the contents of the cache so that it stores
   # the most recently accessed N pages. This needs to be done with mostly O(1).
-  # |page|: The accessed page
-  def access_page(self, page):
+  # |url|: The accessed URL
+  # |contents|: The contents of the URL
+  def access_page(self, url, contents):
     ###########################
     # Write your code here :) #
     ###########################
+    pass
 
-  # Return the contents of the cache as a list. The contents must be ordered
-  # in the order in which the pages are mostly recently accessed.
+  # Return the URLs stored in the cache. The URLs are ordered
+  # in the order in which the URLs are mostly recently accessed.
   def get_pages(self):
     ###########################
     # Write your code here :) #
     ###########################
+    pass
 
 
 # Does your code pass all test cases? :)
@@ -32,53 +36,53 @@ def cache_test():
   cache = Cache(4)
   # Initially, no page is cached.
   equal(cache.get_pages(), [])
-  # Access "A". Imagine that "A" means the pair of ("a.com", the page contents).
-  cache.access_page("A")
-  # "A" is cached.
-  equal(cache.get_pages(), ["A"])
-  # Access "B".
-  cache.access_page("B")
+  # Access "a.com".
+  cache.access_page("a.com", "AAA")
+  # "a.com" is cached.
+  equal(cache.get_pages(), ["a.com"])
+  # Access "b.com".
+  cache.access_page("b.com", "BBB")
   # The cache is updated to:
-  #   (most recently accessed)<-- "B", "A" -->(least recently accessed)
-  equal(cache.get_pages(), ["B", "A"])
-  # Access "C".
-  cache.access_page("C")
+  #   (most recently accessed)<-- "b.com", "a.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["b.com", "a.com"])
+  # Access "c.com".
+  cache.access_page("c.com", "CCC")
   # The cache is updated to:
-  #   (most recently accessed)<-- "C", "B", "A" -->(least recently accessed)
-  equal(cache.get_pages(), ["C", "B", "A"])
-  # Access "D".
-  cache.access_page("D")
+  #   (most recently accessed)<-- "c.com", "b.com", "a.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["c.com", "b.com", "a.com"])
+  # Access "d.com".
+  cache.access_page("d.com", "DDD")
   # The cache is updated to:
-  #   (most recently accessed)<-- "D", "C", "B", "A" -->(least recently accessed)
-  equal(cache.get_pages(), ["D", "C", "B", "A"])
-  # Access "D" again.
-  cache.access_page("D")
+  #   (most recently accessed)<-- "d.com", "c.com", "b.com", "a.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["d.com", "c.com", "b.com", "a.com"])
+  # Access "d.com" again.
+  cache.access_page("d.com", "DDD")
   # The cache is updated to:
-  #   (most recently accessed)<-- "D", "C", "B", "A" -->(least recently accessed)
-  equal(cache.get_pages(), ["D", "C", "B", "A"])
-  # Access "A" again.
-  cache.access_page("A")
+  #   (most recently accessed)<-- "d.com", "c.com", "b.com", "a.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["d.com", "c.dom", "b.com", "a.com"])
+  # Access "a.com" again.
+  cache.access_page("a.com", "AAA")
   # The cache is updated to:
-  #   (most recently accessed)<-- "A", "D", "C", "B" -->(least recently accessed)
-  equal(cache.get_pages(), ["A", "D", "C", "B"])
-  cache.access_page("C")
-  equal(cache.get_pages(), ["C", "A", "D", "B"])
-  cache.access_page("A")
-  equal(cache.get_pages(), ["A", "C", "D", "B"])
-  cache.access_page("A")
-  equal(cache.get_pages(), ["A", "C", "D", "B"])
-  # Access "E".
-  cache.access_page("E")
-  # The cache is full, so we need to remove the least recently accessed page "B".
+  #   (most recently accessed)<-- "a.com", "d.com", "c.com", "b.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["a.com", "d.com", "c.com", "b.com"])
+  cache.access_page("c.com", "CCC")
+  equal(cache.get_pages(), ["c.com", "a.com", "d.com", "b.com"])
+  cache.access_page("a.com", "AAA")
+  equal(cache.get_pages(), ["a.com", "c.com", "d.com", "b.com"])
+  cache.access_page("a.com", "AAA")
+  equal(cache.get_pages(), ["a.com", "c.com", "d.com", "b.com"])
+  # Access "e.com".
+  cache.access_page("e.com", "EEE")
+  # The cache is full, so we need to remove the least recently accessed page "b.com".
   # The cache is updated to:
-  #   (most recently accessed)<-- "E", "A", "C", "D" -->(least recently accessed)
-  equal(cache.get_pages(), ["E", "A", "C", "D"])
-  # Access "F".
-  cache.access_page("F")
-  # The cache is full, so we need to remove the least recently accessed page "C".
+  #   (most recently accessed)<-- "e.com", "a.com", "c.com", "d.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["e.com", "a.com", "c.com", "d.com"])
+  # Access "f.com".
+  cache.access_page("f.com", "FFF")
+  # The cache is full, so we need to remove the least recently accessed page "c.com".
   # The cache is updated to:
-  #   (most recently accessed)<-- "F", "E", "A", "C" -->(least recently accessed)
-  equal(cache.get_pages(), ["F", "E", "A", "C"])
+  #   (most recently accessed)<-- "f.com", "e.com", "a.com", "c.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["f.com", "e.com", "a.com", "c.com"])
   print("OK!")
 
 # A helper function to check if the contents of the two lists is the same.
