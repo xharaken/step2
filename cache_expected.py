@@ -6,28 +6,58 @@ class Cache:
   # Initializes the cache.
   # |n|: The size of the cache.
   def __init__(self, n):
-    ###########################
-    # Write your code here :) #
-    ###########################
-    pass
+    assert(n >= 1)
+    self.list_head_ = {"url": "", "contents": "", "prev": None, "next": None}
+    self.list_tail_ = {"url": "", "contents": "", "prev": None, "next": None}
+    self.list_head_["next"] = self.list_tail_
+    self.list_tail_["prev"] = self.list_head_
+    self.n_ = n
+    self.count_ = 0
+    self.url_to_node_ = {}
 
   # Access a page and update the cache so that it stores the most
   # recently accessed N pages. This needs to be done with mostly O(1).
   # |url|: The accessed URL
   # |contents|: The contents of the URL
   def access_page(self, url, contents):
-    ###########################
-    # Write your code here :) #
-    ###########################
-    pass
+    node = None
+    if url in self.url_to_node_:
+      node = self.url_to_node_[url]
+      assert(node["prev"])
+      assert(node["next"])
+      node["prev"]["next"] = node["next"]
+      node["next"]["prev"] = node["prev"]
+    else:
+      if self.count_ >= self.n_:
+        tail = self.list_tail_["prev"]
+        del self.url_to_node_[tail["url"]]
+        tail["prev"]["next"] = self.list_tail_
+        self.list_tail_["prev"] = tail["prev"]
+        self.count_ -= 1
+      node = {"url": url, "contents": contents, "prev": None, "next": None}
+      self.url_to_node_[url] = node
+      self.count_ += 1
+    node["next"] = self.list_head_["next"]
+    node["prev"] = self.list_head_
+    self.list_head_["next"]["prev"] = node
+    self.list_head_["next"] = node
 
   # Return the URLs stored in the cache. The URLs are ordered
   # in the order in which the URLs are mostly recently accessed.
   def get_pages(self):
-    ###########################
-    # Write your code here :) #
-    ###########################
-    pass
+    node = self.list_head_["next"]
+    urls = []
+    count = 0
+    while node["next"]:
+      assert(node["url"] != "")
+      assert(self.url_to_node_[node["url"]] == node)
+      assert(node["prev"]["next"] == node)
+      assert(node["next"]["prev"] == node)
+      urls.append(node["url"])
+      node = node["next"]
+      count += 1
+    assert(count == self.count_)
+    return urls
 
 
 # Does your code pass all test cases? :)
