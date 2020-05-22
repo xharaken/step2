@@ -2,6 +2,9 @@ import sys
 
 # Cache is a data structure that stores the most recently accessed N pages.
 # See the below test cases to see how it should work.
+#
+# Note: Please do not use a library (e.g., collections.OrderedDict).
+#       Implement the data structure yourself.
 class Cache:
   # Initializes the cache.
   # |n|: The size of the cache.
