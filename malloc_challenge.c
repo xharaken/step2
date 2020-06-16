@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// **************** (๑＞◡＜๑)  Malloc Challenge!!  (◍＞◡＜◍) **************** //
+/*                 (๑＞◡＜๑)  Malloc Challenge!!  (◍＞◡＜◍)                   */
 ////////////////////////////////////////////////////////////////////////////////
 
 //
@@ -11,18 +11,19 @@
 //   *  my_initialize() is called only once at the beginning of each challenge.
 //      You can initialize the memory allocator.
 //   *  my_malloc(size) is called every time an object is allocated. In this
-//      challenge, |size| is guaranteed to be a multiple of 8 bytes and equal to
-//      or smaller than 4000 bytes. 8 <= size <= 4000.
+//      challenge, |size| is guaranteed to be a multiple of 8 bytes and meets
+//      8 <= size <= 4000.
 //   * my_free(ptr) is called every time an object is freed.
 // 2. The only library functions you can use in my_malloc() and my_free() are
-//    _mmap() and _munmap().
-//   *  _mmap(size) allocates |size| bytes from the system. |size| needs to be
-//      a multiple of 4096 bytes. _mmap(size) is a system call and heavy. You
-//      are expected to minimize the call of _mmap(size) by reusing the returned
+//    mmap_from_system() and munmap_to_system().
+//   *  mmap_from_system(size) allocates |size| bytes from the system. |size|
+//      needs to be a multiple of 4096 bytes. mmap_from_system(size) is a
+//      system call and heavy. You are expected to minimize the call of
+//      mmap_from_system(size) by reusing the returned
 //      memory region as much as possible.
-//   *  _munmap(ptr, size) frees the memory region [ptr, ptr + size) to the
-//      system. |ptr| and |size| need to be a multiple of 4096 bytes. You are
-//      expected to free memory regions that are unused.
+//   *  munmap_to_system(ptr, size) frees the memory region [ptr, ptr + size)
+//      to the system. |ptr| and |size| need to be a multiple of 4096 bytes.
+//      You are expected to free memory regions that are unused.
 //   *  You are NOT allowed to use any other library functions at all, including
 //      the default malloc() / free(), std:: libraries etc. This is because you
 //      are implementing malloc itself -- if you use something that may use
@@ -38,9 +39,9 @@
 //   *  [Memory utilization] How much your malloc is memory efficient.
 //      This is defined as (S1 / S2), where S1 is the total size of objects
 //      allocated at the end of the challange and S2 is the total size of
-//      _mmap()ed regions at the end of the challenge. You can improve the
-//      memory utilization by decreasing memory fragmentation and reclaiming
-//      unused memory regions to the system with _munmap().
+//      mmap_from_system()ed regions at the end of the challenge. You can
+//      improve the memory utilization by decreasing memory fragmentation and
+//      reclaiming unused memory regions to the system with munmap_to_system().
 // 5. This program works on Linux and Mac but not on Windows. If you don't have
 //    Linux or Mac, you can use Google Cloud Shell (See https://docs.google.com/document/d/1TNu8OfoQmiQKy9i2jPeGk1DOOzSVfbt4RoP_wcXgQSs/edit#).
 // 6. You need to specify an '-lm' option to compile this program.
@@ -58,8 +59,8 @@
 #include <sys/mman.h>
 #include <sys/time.h>
 
-void* _mmap(size_t size);
-void _munmap(void* ptr, size_t size);
+void* mmap_from_system(size_t size);
+void munmap_to_system(void* ptr, size_t size);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -127,9 +128,9 @@ void simple_initialize() {
 }
 
 // This is called every time an object is allocated. |size| is guaranteed
-// to be a multiple of 8 bytes and equal to or smaller than 4000 bytes.
-// i.e., 8 <= |size| <= 4000. You are not allowed to use any library functions
-// other than _mmap / _munmap.
+// to be a multiple of 8 bytes and meets 8 <= |size| <= 4000. You are not
+// allowed to use any library functions other than mmap_from_system /
+// munmap_to_system.
 void* simple_malloc(size_t size) {
   simple_metadata_t* metadata = simple_heap.free_head;
   simple_metadata_t* prev = NULL;
@@ -141,7 +142,7 @@ void* simple_malloc(size_t size) {
   
   if (!metadata) {
     // There was no free slot available. We need to request a new memory region
-    // from the system by calling _mmap().
+    // from the system by calling mmap_from_system().
     //
     //     | metadata | free slot |
     //     ^
@@ -149,7 +150,7 @@ void* simple_malloc(size_t size) {
     //     <---------------------->
     //            buffer_size
     size_t buffer_size = 4096;
-    simple_metadata_t* metadata = (simple_metadata_t*)_mmap(buffer_size);
+    simple_metadata_t* metadata = (simple_metadata_t*)mmap_from_system(buffer_size);
     metadata->size = buffer_size - sizeof(simple_metadata_t);
     metadata->next = NULL;
     // Add the memory region to the free list.
@@ -187,7 +188,7 @@ void* simple_malloc(size_t size) {
 }
 
 // This is called every time an object is freed.  You are not allowed to use
-// any library functions other than _mmap / _munmap.
+// any library functions other than mmap_from_system / munmap_to_system.
 void simple_free(void* ptr) {
   // Look up the metadata. The metadata is placed just prior to the object.
   //
@@ -212,15 +213,15 @@ void my_initialize() {
 }
 
 // This is called every time an object is allocated. |size| is guaranteed
-// to be a multiple of 8 bytes and equal to or smaller than 4000 bytes.
-// i.e., 8 <= |size| <= 4000. You are not allowed to use any library functions
-// other than _mmap / _munmap.
+// to be a multiple of 8 bytes and meets 8 <= |size| <= 4000. You are not
+// allowed to use any library functions other than mmap_from_system /
+// munmap_to_system.
 void* my_malloc(size_t size) {
   return simple_malloc(size);  // Rewrite!
 }
 
 // This is called every time an object is freed.  You are not allowed to use
-// any library functions other than _mmap / _munmap.
+// any library functions other than mmap_from_system / munmap_to_system.
 void my_free(void* ptr) {
   simple_free(ptr);  // Rewrite!
 }
@@ -500,7 +501,7 @@ void run_challenges() {
 
 // Allocate a memory region from the system. |size| needs to be a multiple of
 // 4096 bytes.
-void* _mmap(size_t size) {
+void* mmap_from_system(size_t size) {
   assert(size % 4096 == 0);
   stats.mmap_size += size;
   void* ptr = mmap(NULL, size,
@@ -511,7 +512,7 @@ void* _mmap(size_t size) {
 
 // Free a memory region [ptr, ptr + size) to the system. |ptr| and |size| needs to
 // be a multiple of 4096 bytes.
-void _munmap(void* ptr, size_t size) {
+void munmap_to_system(void* ptr, size_t size) {
   assert(size % 4096 == 0);
   assert((uintptr_t)(ptr) % 4096 == 0);
   stats.mmap_size -= size;
