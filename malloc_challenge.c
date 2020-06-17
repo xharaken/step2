@@ -56,6 +56,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <sys/time.h>
 
@@ -258,6 +259,7 @@ void test() {
 typedef struct object_t {
   void* ptr;
   size_t size;
+  char tag; // A tag to check the object is not broken.
 } object_t;
 
 typedef struct vector_t {
@@ -382,6 +384,7 @@ void run_challenge(size_t min_size,
   const int epochs_per_cycle = 100;
   const int objects_per_epoch_small = 100;
   const int objects_per_epoch_large = 400;
+  char tag = 0;
   // The last entry of the vector is used to store objects that are never freed.
   vector_t* objects[epochs_per_cycle + 1];
   for (int i = 0; i < epochs_per_cycle + 1; i++) {
@@ -397,7 +400,7 @@ void run_challenge(size_t min_size,
       
       // Allocate |objects_per_epoch| objects.
       int objects_per_epoch = objects_per_epoch_small;
-      if (epoch == 0 && cycle < cycles - 1) {
+      if (epoch == 0) {
         // To simulate a peak memory usage, we allocate a larger number of objects
         // from time to time.
         objects_per_epoch = objects_per_epoch_large;
@@ -408,7 +411,14 @@ void run_challenge(size_t min_size,
         stats.allocated_size += size;
         allocated += size;
         void* ptr = malloc_func(size);
-        object_t object = {ptr, size};
+        memset(ptr, tag, size);
+        object_t object = {ptr, size, tag};
+        tag++;
+        if (tag == 0) {
+          // Avoid 0 for tagging since it is not distinguishable from fresh
+          // mmaped memory.
+          tag++;
+        }
         if (urand() < 0.02) {
           // 2% of objects are set as never freed.
           vector_push(objects[epochs_per_cycle], object);
@@ -423,6 +433,12 @@ void run_challenge(size_t min_size,
         object_t object = vector_at(vector, i);
         stats.freed_size += object.size;
         freed += object.size;
+        // Check that the tag is not broken.
+        if (((char*)object.ptr)[0] != object.tag ||
+            ((char*)object.ptr)[object.size - 1] != object.tag) {
+          printf("An allocated object is broken!");
+          assert(0);
+        }
         free_func(object.ptr);
       }
       
