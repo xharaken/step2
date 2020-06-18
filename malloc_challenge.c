@@ -237,12 +237,12 @@ void my_free(void* ptr) {
 void test() {
   my_initialize();
   for (int i = 0; i < 100; i++) {
-    void* ptr = my_malloc(100);
+    void* ptr = my_malloc(96);
     my_free(ptr);
   }
   void* ptrs[100];
   for (int i = 0; i < 100; i++) {
-    ptrs[i] = my_malloc(100);
+    ptrs[i] = my_malloc(96);
   }
   for (int i = 0; i < 100; i++) {
     my_free(ptrs[i]);
@@ -365,6 +365,7 @@ typedef struct stats_t {
   double begin_time;
   double end_time;
   size_t mmap_size;
+  size_t munmap_size;
   size_t allocated_size;
   size_t freed_size;
 } stats_t;
@@ -383,7 +384,7 @@ void run_challenge(size_t min_size,
   const int cycles = 10;
   const int epochs_per_cycle = 100;
   const int objects_per_epoch_small = 100;
-  const int objects_per_epoch_large = 400;
+  const int objects_per_epoch_large = 2000;
   char tag = 0;
   // The last entry of the vector is used to store objects that are never freed.
   vector_t* objects[epochs_per_cycle + 1];
@@ -391,7 +392,8 @@ void run_challenge(size_t min_size,
     objects[i] = vector_create();
   }
   initialize_func();
-  stats.mmap_size = stats.allocated_size = stats.freed_size = 0;
+  stats.mmap_size = stats.munmap_size = 0;
+  stats.allocated_size = stats.freed_size = 0;
   stats.begin_time = get_time();
   for (int cycle = 0; cycle < cycles; cycle++) {
     for (int epoch = 0; epoch < epochs_per_cycle; epoch++) {
@@ -419,8 +421,8 @@ void run_challenge(size_t min_size,
           // mmaped memory.
           tag++;
         }
-        if (urand() < 0.02) {
-          // 2% of objects are set as never freed.
+        if (urand() < 0.04) {
+          // 4% of objects are set as never freed.
           vector_push(objects[epochs_per_cycle], object);
         } else {
           vector_push(objects[(epoch + lifetime) % epochs_per_cycle], object);
@@ -441,17 +443,19 @@ void run_challenge(size_t min_size,
         }
         free_func(object.ptr);
       }
-      
-      /*
+
+#if 0
       // Debug print
       printf("epoch = %d, allocated = %ld bytes, freed = %ld bytes\n",
              cycle * epochs_per_cycle + epoch, allocated, freed);
-      printf("allocated = %.2f MB, freed = %.2f MB, mmaped = %.2f MB, utilization = %d%%\n",
+      printf("allocated = %.2f MB, freed = %.2f MB, mmap = %.2f MB, munmap = %.2f MB, utilization = %d%%\n",
              stats.allocated_size / 1024.0 / 1024.0,
              stats.freed_size / 1024.0 / 1024.0,
              stats.mmap_size / 1024.0 / 1024.0,
-             (int)(100.0 * (stats.allocated_size - stats.freed_size) / stats.mmap_size));
-      */
+             stats.munmap_size / 1024.0 / 1024.0,
+             (int)(100.0 * (stats.allocated_size - stats.freed_size)
+                   / (stats.mmap_size - stats.munmap_size)));
+#endif
       vector_clear(vector);
     }
   }
@@ -469,16 +473,19 @@ void print_stats(char* challenge, stats_t simple_stats, stats_t my_stats) {
          (my_stats.end_time - my_stats.begin_time) * 1000);
   printf("Utilization: %d%% => %d%%\n",
          (int)(100.0 * (simple_stats.allocated_size - simple_stats.freed_size)
-               / simple_stats.mmap_size),
+               / (simple_stats.mmap_size - simple_stats.munmap_size)),
          (int)(100.0 * (my_stats.allocated_size - my_stats.freed_size)
-               / my_stats.mmap_size));
+               / (my_stats.mmap_size - my_stats.munmap_size)));
   printf("==================================\n");
 }
 
 // Run challenges
 void run_challenges() {
   stats_t simple_stats, my_stats;
-  
+
+  // Warm up run.
+  run_challenge(128, 128, simple_initialize, simple_malloc, simple_free);
+
   // Challenge 1:
   run_challenge(128, 128, simple_initialize, simple_malloc, simple_free);
   simple_stats = stats;
@@ -501,9 +508,9 @@ void run_challenges() {
   print_stats("Challenge 3", simple_stats, my_stats);
 
   // Challenge 4:
-  run_challenge(16, 1600, simple_initialize, simple_malloc, simple_free);
+  run_challenge(256, 4000, simple_initialize, simple_malloc, simple_free);
   simple_stats = stats;
-  run_challenge(16, 1600, my_initialize, my_malloc, my_free);
+  run_challenge(256, 4000, my_initialize, my_malloc, my_free);
   my_stats = stats;
   print_stats("Challenge 4", simple_stats, my_stats);
 
@@ -531,7 +538,7 @@ void* mmap_from_system(size_t size) {
 void munmap_to_system(void* ptr, size_t size) {
   assert(size % 4096 == 0);
   assert((uintptr_t)(ptr) % 4096 == 0);
-  stats.mmap_size -= size;
+  stats.munmap_size += size;
   int ret = munmap(ptr, size);
   assert(ret != -1);
 }
