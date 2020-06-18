@@ -34,8 +34,8 @@
 // 4. There are five challenges (Challenge 1, 2, 3, 4 and 5). Each challenge
 //    allocates and frees many objects with different patterns. Your malloc
 //    is evaluated by two criteria.
-//   *  [Execution time] How faster your malloc finishes the challange compared
-//      to the simple malloc.
+//   *  [Speed] How faster your malloc finishes the challange compared to
+//      the simple malloc.
 //   *  [Memory utilization] How much your malloc is memory efficient.
 //      This is defined as (S1 / S2), where S1 is the total size of objects
 //      allocated at the end of the challange and S2 is the total size of
