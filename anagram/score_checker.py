@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 import sys
 
 # How to use:
@@ -30,19 +32,38 @@ def read_words(word_file):
             words.append(line)
     return words
 
-def main(answer_file):
-    words = read_words(WORDS_FILE)
+def is_anagram(anagram, data):
+    data_table = [0] * 26
+    for character in data:
+        data_table[ord(character) - ord('a')] += 1
+    for character in anagram:
+        if (data_table[ord(character) - ord('a')] == 0):
+            return False
+        data_table[ord(character) - ord('a')] -= 1
+    return True
+
+def main(data_file, answer_file):
+    valid_words = read_words(WORDS_FILE)
+    data_words = read_words(data_file)
     answer_words = read_words(answer_file)
+    if len(data_words) != len(answer_words):
+        print("The number of words in %s and %s doesn't match." %
+              (data_file, answer_file))
+        exit(1)
     score = 0
-    for answer_word in answer_words:
-        if answer_word not in words:
-            print("'%s' is not a valid word!" % answer_word)
+    for i in range(len(data_words)):
+        if not is_anagram(answer_words[i], data_words[i]):
+            print("'%s' is not an anagram of '%s'." %
+                  (answer_words[i], data_words[i]))
             exit(1)
-        score += calculate_score(answer_word)
+        if answer_words[i] not in valid_words:
+            print("'%s' is not a valid word!" % answer_words[i])
+            exit(1)
+        score += calculate_score(answer_words[i])
     print('You answer is correct! Your score is %d.' % score)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: %s your_answer_file" % sys.argv[0])
+    if len(sys.argv) != 3:
+        print("usage: %s data_file your_answer_file" % sys.argv[0])
         exit(1)
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
