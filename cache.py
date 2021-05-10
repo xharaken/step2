@@ -91,8 +91,6 @@ def cache_test():
 # A helper function to check if the contents of the two lists is the same.
 def equal(list1, list2):
   assert(list1 == list2)
-  for i in range(len(list1)):
-    assert(list1[i] == list2[i])
 
 if __name__ == "__main__":
   cache_test()
