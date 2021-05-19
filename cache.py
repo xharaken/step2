@@ -86,6 +86,16 @@ def cache_test():
   # The cache is updated to:
   #   (most recently accessed)<-- "f.com", "e.com", "a.com", "c.com" -->(least recently accessed)
   equal(cache.get_pages(), ["f.com", "e.com", "a.com", "c.com"])
+  # Access "e.com".
+  cache.access_page("e.com", "EEE")
+  # The cache is updated to:
+  #   (most recently accessed)<-- "e.com", "f.com", "a.com", "c.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["e.com", "f.com", "a.com", "c.com"])
+  # Access "a.com".
+  cache.access_page("a.com", "AAA")
+  # The cache is updated to:
+  #   (most recently accessed)<-- "a.com", "e.com", "f.com", "c.com" -->(least recently accessed)
+  equal(cache.get_pages(), ["a.com", "e.com", "f.com", "c.com"])
   print("OK!")
 
 # A helper function to check if the contents of the two lists is the same.
