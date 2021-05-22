@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # Run this program with python3 (not python2)
 
-def readNumber(line, index):
+def read_number(line, index):
   number = 0
   flag = 0
   keta = 1
@@ -17,32 +17,32 @@ def readNumber(line, index):
   return token, index
 
 
-def readPlus(line, index):
+def read_plus(line, index):
   token = {'type': 'PLUS'}
   return token, index + 1
 
 
-def readMinus(line, index):
+def read_minus(line, index):
   token = {'type': 'MINUS'}
   return token, index + 1
 
 
-def readMultiply(line, index):
+def read_multiply(line, index):
   token = {'type': 'MULTIPLY'}
   return token, index + 1
 
 
-def readDivide(line, index):
+def read_divide(line, index):
   token = {'type': 'DIVIDE'}
   return token, index + 1
 
 
-def readLeft(line, index):
+def read_left(line, index):
   token = {'type': 'LEFT'}
   return token, index + 1
 
 
-def readRight(line, index):
+def read_right(line, index):
   token = {'type': 'RIGHT'}
   return token, index + 1
 
@@ -52,19 +52,19 @@ def tokenize(line):
   index = 0
   while index < len(line):
     if line[index].isdigit():
-      (token, index) = readNumber(line, index)
+      (token, index) = read_number(line, index)
     elif line[index] == '+':
-      (token, index) = readPlus(line, index)
+      (token, index) = read_plus(line, index)
     elif line[index] == '-':
-      (token, index) = readMinus(line, index)
+      (token, index) = read_minus(line, index)
     elif line[index] == '*':
-      (token, index) = readMultiply(line, index)
+      (token, index) = read_multiply(line, index)
     elif line[index] == '/':
-      (token, index) = readDivide(line, index)
+      (token, index) = read_divide(line, index)
     elif line[index] == '(':
-      (token, index) = readLeft(line, index)
+      (token, index) = read_left(line, index)
     elif line[index] == ')':
-      (token, index) = readRight(line, index)
+      (token, index) = read_right(line, index)
     else:
       print('Invalid character found: ' + line[index])
       exit(1)
@@ -73,15 +73,15 @@ def tokenize(line):
 
 
 # <term>   ::= <factor> [ ('*'|'/') <factor> ]*
-def evaluateTerm(tokens, index):
-  (number, index) = evaluateFactor(tokens, index)
+def evaluate_term(tokens, index):
+  (number, index) = evaluate_factor(tokens, index)
   result = number
   while index < len(tokens) and (tokens[index]['type'] == 'MULTIPLY' or tokens[index]['type'] == 'DIVIDE'):
     if tokens[index]['type'] == 'MULTIPLY':
-      (number, index) = evaluateFactor(tokens, index + 1)
+      (number, index) = evaluate_factor(tokens, index + 1)
       result *= number
     else:
-      (number, index) = evaluateFactor(tokens, index + 1)
+      (number, index) = evaluate_factor(tokens, index + 1)
       if number == 0:
         print('Error: Division by 0')
         exit(1)
@@ -90,25 +90,25 @@ def evaluateTerm(tokens, index):
 
 
 # <expression> ::= <term> [ ('+'|'-') <term> ]*
-def evaluateExpression(tokens, index):
-  (number, index) = evaluateTerm(tokens, index)
+def evaluate_expression(tokens, index):
+  (number, index) = evaluate_term(tokens, index)
   result = number
   while index < len(tokens) and (tokens[index]['type'] == 'PLUS' or tokens[index]['type'] == 'MINUS'):
     if tokens[index]['type'] == 'PLUS':
-      (number, index) = evaluateTerm(tokens, index + 1)
+      (number, index) = evaluate_term(tokens, index + 1)
       result += number
     else:
-      (number, index) = evaluateTerm(tokens, index + 1)
+      (number, index) = evaluate_term(tokens, index + 1)
       result -= number
   return (result, index)
 
 
 # <factor> ::= <number> | '(' <expression> ')'
-def evaluateFactor(tokens, index):
+def evaluate_factor(tokens, index):
   if tokens[index]['type'] == 'NUMBER':
     return (tokens[index]['number'], index + 1)
   if tokens[index]['type'] == 'LEFT':
-    (number, index) = evaluateExpression(tokens, index + 1)
+    (number, index) = evaluate_expression(tokens, index + 1)
     if tokens[index]['type'] == 'RIGHT':
       return (number, index + 1)
     print('Parse error')
@@ -118,23 +118,23 @@ def evaluateFactor(tokens, index):
 
 
 def evaluate(tokens):
-  (number, index) = evaluateExpression(tokens, 0)
+  (number, index) = evaluate_expression(tokens, 0)
   assert(index == len(tokens))
   return number
 
 
 def test(line):
     tokens = tokenize(line)
-    actualAnswer = evaluate(tokens)
-    expectedAnswer = eval(line)
-    if abs(actualAnswer - expectedAnswer) < 1e-8:
-        print("PASS! (%s = %f)" % (line, expectedAnswer))
+    actual_answer = evaluate(tokens)
+    expected_answer = eval(line)
+    if abs(actual_answer - expected_answer) < 1e-8:
+        print("PASS! (%s = %f)" % (line, expected_answer))
     else:
-        print("FAIL! (%s should be %f but was %f)" % (line, expectedAnswer, actualAnswer))
+        print("FAIL! (%s should be %f but was %f)" % (line, expected_answer, actual_answer))
 
 
 # Add more tests to this function :)
-def runTest():
+def run_test():
     print("==== Test started! ====")
     test("1")
     test("11")
@@ -176,7 +176,7 @@ def runTest():
     test("(1.1+2.2)*3.3-4.4/(5.5-(6.5-7.7*8.8+9.9/(10.0-11.1)*12.2))")
     print("==== Test finished! ====\n")
 
-runTest()
+run_test()
 
 while True:
     print('> ')

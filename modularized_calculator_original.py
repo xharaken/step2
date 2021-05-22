@@ -1,4 +1,6 @@
-def readNumber(line, index):
+#! /usr/bin/python3
+
+def read_number(line, index):
     number = 0
     while index < len(line) and line[index].isdigit():
         number = number * 10 + int(line[index])
@@ -7,7 +9,7 @@ def readNumber(line, index):
     return token, index
 
 
-def readPlus(line, index):
+def read_plus(line, index):
     token = {'type': 'PLUS'}
     return token, index + 1
 
@@ -20,9 +22,9 @@ def tokenize(line):
     index = 0
     while index < len(line):
         if line[index].isdigit():
-            (token, index) = readNumber(line, index)
+            (token, index) = read_number(line, index)
         elif line[index] == '+':
-            (token, index) = readPlus(line, index)
+            (token, index) = read_plus(line, index)
         else:
             print('Invalid character found: ' + line[index])
             exit(1)

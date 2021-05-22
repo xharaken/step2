@@ -1,25 +1,27 @@
-def readNumber(line, index):
+#! /usr/bin/python3
+
+def read_number(line, index):
   number = 0
   while index < len(line) and line[index].isdigit():
     number = number * 10 + int(line[index])
     index += 1
   if index < len(line) and line[index] == '.':
     index += 1
-    keta = 0.1
+    decimal = 0.1
     while index < len(line) and line[index].isdigit():
-      number += int(line[index]) * keta
-      keta /= 10
+      number += int(line[index]) * decimal
+      decimal /= 10
       index += 1
   token = {'type': 'NUMBER', 'number': number}
   return token, index
 
 
-def readPlus(line, index):
+def read_plus(line, index):
   token = {'type': 'PLUS'}
   return token, index + 1
 
 
-def readMinus(line, index):
+def read_minus(line, index):
   token = {'type': 'MINUS'}
   return token, index + 1
 
@@ -29,11 +31,11 @@ def tokenize(line):
   index = 0
   while index < len(line):
     if line[index].isdigit():
-      (token, index) = readNumber(line, index)
+      (token, index) = read_number(line, index)
     elif line[index] == '+':
-      (token, index) = readPlus(line, index)
+      (token, index) = read_plus(line, index)
     elif line[index] == '-':
-      (token, index) = readMinus(line, index)
+      (token, index) = read_minus(line, index)
     else:
       print('Invalid character found: ' + line[index])
       exit(1)
@@ -60,22 +62,22 @@ def evaluate(tokens):
 
 def test(line):
   tokens = tokenize(line)
-  actualAnswer = evaluate(tokens)
-  expectedAnswer = eval(line)
-  if abs(actualAnswer - expectedAnswer) < 1e-8:
-    print("PASS! (%s = %f)" % (line, expectedAnswer))
+  actual_answer = evaluate(tokens)
+  expected_answer = eval(line)
+  if abs(actual_answer - expected_answer) < 1e-8:
+    print("PASS! (%s = %f)" % (line, expected_answer))
   else:
-    print("FAIL! (%s should be %f but was %f)" % (line, expectedAnswer, actualAnswer))
+    print("FAIL! (%s should be %f but was %f)" % (line, expected_answer, actual_answer))
 
 
 # Add more tests to this function :)
-def runTest():
+def run_test():
   print("==== Test started! ====")
   test("1+2")
   test("1.0+2.1-3")
   print("==== Test finished! ====\n")
 
-runTest()
+run_test()
 
 while True:
   print('> ', end="")
