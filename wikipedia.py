@@ -37,7 +37,7 @@ class Wikipedia:
 
 
     # Find the longest titles. This is not related to a graph algorithm at all though :)
-    def find_the_longest_titles(self):
+    def find_longest_titles(self):
         titles = sorted(self.titles.values(), key=len, reverse=True)
         print("The longest titles are:")
         count = 0
@@ -51,7 +51,7 @@ class Wikipedia:
 
 
     # Find the most linked pages.
-    def find_the_most_linked_pages(self):
+    def find_most_linked_pages(self):
         link_count = {}
         for id in self.titles.keys():
             link_count[id] = 0
@@ -71,7 +71,7 @@ class Wikipedia:
     # Find the shortest path.
     # |start|: The title of the start page.
     # |goal|: The title of the goal page.
-    def find_the_shortest_path(self, start, goal):
+    def find_shortest_path(self, start, goal):
         ###########################
         # Write your code here :) #
         ###########################
@@ -79,7 +79,7 @@ class Wikipedia:
 
 
     # Calculate the page ranks and print the most popular pages.
-    def find_the_most_popular_pages(self):
+    def find_most_popular_pages(self):
         ###########################
         # Write your code here :) #
         ###########################
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         exit(1)
 
     wikipedia = Wikipedia(sys.argv[1], sys.argv[2])
-    wikipedia.find_the_longest_titles()
-    wikipedia.find_the_most_linked_pages()
-    wikipedia.find_the_shortest_path("渋谷", "小野妹子")
-    wikipedia.find_the_most_popular_pages()
+    wikipedia.find_longest_titles()
+    wikipedia.find_most_linked_pages()
+    wikipedia.find_shortest_path("渋谷", "小野妹子")
+    wikipedia.find_most_popular_pages()
