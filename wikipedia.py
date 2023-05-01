@@ -7,11 +7,13 @@ class Wikipedia:
     def __init__(self, pages_file, links_file):
 
         # A mapping from a page ID (integer) to the page title.
-        # For example, self.titles[1234] returns the title of the page whose ID is 1234.
+        # For example, self.titles[1234] returns the title of the page whose
+        # ID is 1234.
         self.titles = {}
 
         # A set of page links.
-        # For example, self.links[1234] returns an array of page IDs linked from the page whose ID is 1234.
+        # For example, self.links[1234] returns an array of page IDs linked
+        # from the page whose ID is 1234.
         self.links = {}
 
         # Read the pages file into self.titles.
@@ -36,7 +38,8 @@ class Wikipedia:
         print()
 
 
-    # Find the longest titles. This is not related to a graph algorithm at all though :)
+    # Find the longest titles. This is not related to a graph algorithm at all
+    # though :)
     def find_longest_titles(self):
         titles = sorted(self.titles.values(), key=len, reverse=True)
         print("The longest titles are:")
@@ -72,25 +75,25 @@ class Wikipedia:
     # |start|: The title of the start page.
     # |goal|: The title of the goal page.
     def find_shortest_path(self, start, goal):
-        ###########################
-        # Write your code here :) #
-        ###########################
+        #------------------------#
+        # Write your code here!  #
+        #------------------------#
         pass
 
 
     # Calculate the page ranks and print the most popular pages.
     def find_most_popular_pages(self):
-        ###########################
-        # Write your code here :) #
-        ###########################
+        #------------------------#
+        # Write your code here!  #
+        #------------------------#
         pass
 
 
     # Do something more interesting!!
     def find_something_more_interesting(self):
-        ###########################
-        # Write your code here :) #
-        ###########################
+        #------------------------#
+        # Write your code here!  #
+        #------------------------#
         pass
 
 
