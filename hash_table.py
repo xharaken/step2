@@ -14,6 +14,7 @@ import random, sys, time
 # |key|: string
 # Return value: a hash value
 def calculate_hash(key):
+    assert type(key) == str
     # Note: This is not a good hash function. Do you see why?
     hash = 0
     for i in key:
@@ -21,19 +22,21 @@ def calculate_hash(key):
     return hash
 
 
-# An item object in the hash table.
+# An item object that represents one key - value pair in the hash table.
 class Item:
-    # |key|: The key of the item.
+    # |key|: The key of the item. The key must be a string.
     # |value|: The value of the item.
     # |next|: The next item in the linked list. If this is the last item in the
     #         linked list, |next| is None.
     def __init__(self, key, value, next):
+        assert type(key) == str
         self.key = key
         self.value = value
         self.next = next
 
 
-# The main data structure of the hash table.
+# The main data structure of the hash table that stores key - value pairs.
+# The key must be a string. The value can be any type.
 #
 # |self.bucket_size|: The bucket size.
 # |self.buckets|: An array of the buckets. self.buckets[hash % self.bucket_size]
@@ -57,6 +60,7 @@ class HashTable:
     # Return value: True if a new item is added. False if the key already exists
     #               and the value is updated.
     def put(self, key, value):
+        assert type(key) == str
         self.check_size() # Note: Don't remove this code.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
@@ -76,6 +80,7 @@ class HashTable:
     # Return value: If the item is found, (the value of the item, True) is
     #               returned. Otherwise, (None, False) is returned.
     def get(self, key):
+        assert type(key) == str
         self.check_size() # Note: Don't remove this code.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
@@ -91,6 +96,7 @@ class HashTable:
     # Return value: True if the item is found and deleted successfully. False
     #               otherwise.
     def delete(self, key):
+        assert type(key) == str
         #------------------------#
         # Write your code here!  #
         #------------------------#
