@@ -12,65 +12,90 @@ links = {"A": ["B","E","G"],
          "G": ["F"]}
 
 
-# dfs_with_stack visits the nodes in the order of:
-#   A -> B -> E -> G -> F -> C -> D
-def dfs_with_stack():
+# dfs_with_recursion finds A -> B -> C -> D -> E -> F first.
+def dfs_with_recursion(start, goal):
+    print("dfs_with_recursion:")
+    visited = {}
+    path = []
+
+    visited[start] = True
+    if recursion(start, goal, visited, path):
+        print(" -> ".join(path))
+        return
+    print("Not found")
+
+def recursion(node, goal, visited, path):
+    path.append(node)
+    if node == goal:
+        return True
+    for child in links[node]:
+        if not child in visited:
+            visited[child] = True
+            if recursion(child, goal, visited, path):
+                return True
+    path.pop()
+    return False
+
+
+# dfs_with_stack finds A -> G -> F first.
+def dfs_with_stack(start, goal):
     print("dfs_with_stack:")
-    start = "A"
     stack = collections.deque()
     visited = {}
-    visited_order = []
+    previous = {}
 
     stack.append(start)
     visited[start] = True
-    visited_order.append(start)
+    previous[start] = None
     while len(stack):
         node = stack.pop()
+        if node == goal:
+            break
         for child in links[node]:
             if not child in visited:
                 stack.append(child)
                 visited[child] = True
-                visited_order.append(child)
-    print(" -> ".join(visited_order))
+                previous[child] = node
+
+    if goal in previous:
+        path = []
+        node = goal
+        path.append(node)
+        while previous[node]:
+            node = previous[node]
+            path.append(node)
+        path.reverse()
+        print(" -> ".join(path))
+        return
+    print("Not found")
 
 
-# dfs_with_recursion visits the nodes in the order of:
-#   A -> B -> C -> D -> E -> F -> G
-def dfs_with_recursion():
-    print("dfs_with_recursion:")
-    start = "A"
-    visited = {}
-    visited_order = []
-
-    visited[start] = True
-    visited_order.append(start)
-    recursion(start, visited, visited_order)
-    print(" -> ".join(visited_order))
-
-def recursion(current, visited, visited_order):
-    for child in links[current]:
-        if not child in visited:
-            visited[child] = True
-            visited_order.append(child)
-            recursion(child, visited, visited_order)
-
-
-# Challenge quiz: Implement DFS that visits the nodes in the same order as
-# dfs_with_recursion without using recursion (i.e., using a stack)
-#   A -> B -> C -> D -> E -> F -> G
-def dfs_with_stack_in_the_recursion_order():
+# Challenge quiz: Implement DFS using a stack that visits nodes and edges
+# in the same order as dfs_with_recursion. In other words, implement DFS that
+# finds A -> B -> C -> D -> E -> F first using a stack.
+def dfs_with_stack_in_the_recursion_order(start, goal):
     print("dfs_with_stack_in_the_recursion_order:")
-    start = "A"
     stack = collections.deque()
     visited = {}
-    visited_order = []
+    previous = {}
 
     #------------------------#
     # Write your code here!  #
     #------------------------#
-    print(" -> ".join(visited_order))
+
+    if goal in previous:
+        path = []
+        node = goal
+        path.append(node)
+        while previous[node]:
+            node = previous[node]
+            path.append(node)
+        path.reverse()
+        print(" -> ".join(path))
+        return
+    print("Not found")
 
 
-dfs_with_stack()
-dfs_with_recursion()
-dfs_with_stack_in_the_recursion_order()
+dfs_with_stack("A", "F")
+dfs_with_recursion("A", "F")
+dfs_with_stack_in_the_recursion_order("A", "F")
