@@ -57,6 +57,7 @@ def dfs_with_stack(start, goal):
                 visited[child] = True
                 previous[child] = node
 
+    # Print the path from |start| to |goal|.
     if goal in previous:
         path = []
         node = goal
@@ -83,6 +84,7 @@ def dfs_with_stack_in_the_recursion_order(start, goal):
     # Write your code here!  #
     #------------------------#
 
+    # Print the path from |start| to |goal|.
     if goal in previous:
         path = []
         node = goal
