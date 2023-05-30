@@ -98,6 +98,6 @@ def dfs_with_stack_in_the_recursion_order(start, goal):
     print("Not found")
 
 
-dfs_with_stack("A", "F")
 dfs_with_recursion("A", "F")
+dfs_with_stack("A", "F")
 dfs_with_stack_in_the_recursion_order("A", "F")
