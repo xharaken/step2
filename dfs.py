@@ -12,28 +12,42 @@ links = {"A": ["B","E","G"],
          "G": ["F"]}
 
 
+# A helper function to find a path.
+def find_path(goal, previous):
+    path = []
+    node = goal
+    path.append(node)
+    while previous[node]:
+        node = previous[node]
+        path.append(node)
+    path.reverse()
+    return path
+
+
 # dfs_with_recursion finds A -> B -> C -> D -> E -> F first.
 def dfs_with_recursion(start, goal):
     print("dfs_with_recursion:")
     visited = {}
-    path = []
+    previous = {}
 
     visited[start] = True
-    if recursion(start, goal, visited, path):
-        print(" -> ".join(path))
-        return
-    print("Not found")
+    previous[start] = None
+    recursion(start, goal, visited, previous)
 
-def recursion(node, goal, visited, path):
-    path.append(node)
+    if goal in previous:
+        print(" -> ".join(find_path(goal, previous)))
+    else:
+        print("Not found")
+
+def recursion(node, goal, visited, previous):
     if node == goal:
         return True
     for child in links[node]:
         if not child in visited:
             visited[child] = True
-            if recursion(child, goal, visited, path):
+            previous[child] = node
+            if recursion(child, goal, visited, previous):
                 return True
-    path.pop()
     return False
 
 
@@ -51,24 +65,16 @@ def dfs_with_stack(start, goal):
         node = stack.pop()
         if node == goal:
             break
-        for child in links[node]:
+        for child in reversed(links[node]):
             if not child in visited:
                 stack.append(child)
                 visited[child] = True
                 previous[child] = node
 
-    # Print the path from |start| to |goal|.
     if goal in previous:
-        path = []
-        node = goal
-        path.append(node)
-        while previous[node]:
-            node = previous[node]
-            path.append(node)
-        path.reverse()
-        print(" -> ".join(path))
-        return
-    print("Not found")
+        print(" -> ".join(find_path(goal, previous)))
+    else:
+        print("Not found")
 
 
 # Challenge quiz: Implement DFS using a stack that visits nodes and edges
@@ -84,18 +90,10 @@ def dfs_with_stack_in_the_recursion_order(start, goal):
     # Write your code here!  #
     #------------------------#
 
-    # Print the path from |start| to |goal|.
     if goal in previous:
-        path = []
-        node = goal
-        path.append(node)
-        while previous[node]:
-            node = previous[node]
-            path.append(node)
-        path.reverse()
-        print(" -> ".join(path))
-        return
-    print("Not found")
+        print(" -> ".join(find_path(goal, previous)))
+    else:
+        print("Not found")
 
 
 dfs_with_recursion("A", "F")
