@@ -65,7 +65,7 @@ def dfs_with_stack(start, goal):
         node = stack.pop()
         if node == goal:
             break
-        for child in reversed(links[node]):
+        for child in links[node]:
             if not child in visited:
                 stack.append(child)
                 visited[child] = True
