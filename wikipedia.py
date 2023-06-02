@@ -105,5 +105,5 @@ if __name__ == "__main__":
     wikipedia = Wikipedia(sys.argv[1], sys.argv[2])
     wikipedia.find_longest_titles()
     wikipedia.find_most_linked_pages()
-    wikipedia.find_shortest_path("渋谷", "小野妹子")
+    wikipedia.find_shortest_path("渋谷", "パレートの法則")
     wikipedia.find_most_popular_pages()
