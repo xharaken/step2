@@ -26,6 +26,7 @@ def solve_n3(L, K):
 
 # O(N^2) algorithm
 def solve_n2(L, K):
+    N = len(L)
     #-----------------------#
     # Write your code here! #
     #-----------------------#
@@ -34,6 +35,7 @@ def solve_n2(L, K):
 
 # O(N) algorithm
 def solve_n(L, K):
+    N = len(L)
     #-----------------------#
     # Write your code here! #
     #-----------------------#
