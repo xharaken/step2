@@ -71,9 +71,9 @@ class Wikipedia:
         print()
 
 
-    # Find the shortest path.
-    # |start|: The title of the start page.
-    # |goal|: The title of the goal page.
+    # Homework #1: Find the shortest path.
+    # 'start': The title of the start page.
+    # 'goal': The title of the goal page.
     def find_shortest_path(self, start, goal):
         #------------------------#
         # Write your code here!  #
@@ -81,7 +81,7 @@ class Wikipedia:
         pass
 
 
-    # Calculate the page ranks and print the most popular pages.
+    # Homework #2: Calculate the page ranks and print the most popular pages.
     def find_most_popular_pages(self):
         #------------------------#
         # Write your code here!  #
@@ -89,8 +89,29 @@ class Wikipedia:
         pass
 
 
+    # Optional homework:
+    # Search a pair of the most distant pages with heuristics.
+    def search_most_distant_pages(self):
+        #------------------------#
+        # Write your code here!  #
+        #------------------------#
+        pass
+
+
+    # Optional homework:
+    # Search the longest path with heuristics.
+    # 'start': The title of the start page.
+    # 'goal': The title of the goal page.
+    def search_longest_path(self, start, goal):
+        #------------------------#
+        # Write your code here!  #
+        #------------------------#
+        pass
+
+
+    # Optional homework:
     # Do something more interesting!!
-    def find_something_more_interesting(self):
+    def do_something_more_interesting(self):
         #------------------------#
         # Write your code here!  #
         #------------------------#
@@ -107,3 +128,6 @@ if __name__ == "__main__":
     wikipedia.find_most_linked_pages()
     wikipedia.find_shortest_path("渋谷", "パレートの法則")
     wikipedia.find_most_popular_pages()
+    wikipedia.search_most_distant_pages()
+    wikipedia.search_longest_path("渋谷", "池袋")
+    wikipedia.do_something_more_interesting()
