@@ -38,8 +38,7 @@ class Wikipedia:
         print()
 
 
-    # Find the longest titles. This is not related to a graph algorithm at all
-    # though :)
+    # Example: Find the longest titles.
     def find_longest_titles(self):
         titles = sorted(self.titles.values(), key=len, reverse=True)
         print("The longest titles are:")
@@ -53,7 +52,7 @@ class Wikipedia:
         print()
 
 
-    # Find the most linked pages.
+    # Example: Find the most linked pages.
     def find_most_linked_pages(self):
         link_count = {}
         for id in self.titles.keys():
@@ -90,28 +89,10 @@ class Wikipedia:
 
 
     # Optional homework:
-    # Search a pair of the most distant pages with heuristics.
-    def search_most_distant_pages(self):
-        #------------------------#
-        # Write your code here!  #
-        #------------------------#
-        pass
-
-
-    # Optional homework:
     # Search the longest path with heuristics.
     # 'start': The title of the start page.
     # 'goal': The title of the goal page.
-    def search_longest_path(self, start, goal):
-        #------------------------#
-        # Write your code here!  #
-        #------------------------#
-        pass
-
-
-    # Optional homework:
-    # Do something more interesting!!
-    def do_something_more_interesting(self):
+    def find_longest_path(self, start, goal):
         #------------------------#
         # Write your code here!  #
         #------------------------#
@@ -124,10 +105,13 @@ if __name__ == "__main__":
         exit(1)
 
     wikipedia = Wikipedia(sys.argv[1], sys.argv[2])
+    # Example
     wikipedia.find_longest_titles()
+    # Example
     wikipedia.find_most_linked_pages()
+    # Homework #1
     wikipedia.find_shortest_path("渋谷", "パレートの法則")
+    # Homework #2
     wikipedia.find_most_popular_pages()
-    wikipedia.search_most_distant_pages()
-    wikipedia.search_longest_path("渋谷", "池袋")
-    wikipedia.do_something_more_interesting()
+    # Optional homework
+    wikipedia.find_longest_path("渋谷", "池袋")
