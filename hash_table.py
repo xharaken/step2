@@ -178,6 +178,18 @@ def functional_test():
     assert hash_table.delete("acb") == True
     assert hash_table.delete("cab") == True
     assert hash_table.size() == 0
+
+    # Test the rehashing.
+    for i in range(100):
+        hash_table.put(str(i), str(i))
+    for i in range(100):
+        assert hash_table.get(str(i)) == (str(i), True)
+    for i in range(100):
+        assert hash_table.delete(str(i)) == True
+    hash_table.put("abc", 1)
+    hash_table.put("acb", 2)
+    assert hash_table.get("abc") == (1, True)
+    assert hash_table.get("acb") == (2, True)
     print("Functional tests passed!")
 
 
