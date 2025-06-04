@@ -61,7 +61,7 @@ class HashTable:
     #               and the value is updated.
     def put(self, key, value):
         assert type(key) == str
-        self.check_size() # Note: Don't remove this code.
+        check_size(self.size(), self.bucket_size)  # Note: Don't remove this.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
         while item:
@@ -81,7 +81,7 @@ class HashTable:
     #               returned. Otherwise, (None, False) is returned.
     def get(self, key):
         assert type(key) == str
-        self.check_size() # Note: Don't remove this code.
+        check_size(self.size(), self.bucket_size)  # Note: Don't remove this.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
         while item:
@@ -106,15 +106,14 @@ class HashTable:
     def size(self):
         return self.item_count
 
-    # Check that the hash table has a "reasonable" bucket size.
-    # The bucket size is judged "reasonable" if it is smaller than 100 or
-    # the buckets are 30% or more used.
-    #
-    # Note: Don't change this function.
-    def check_size(self):
-        assert (self.bucket_size < 100 or
-                self.item_count >= self.bucket_size * 0.3)
 
+# Check that the hash table has a "reasonable" bucket size.
+# The bucket size is judged "reasonable" if it is smaller than 100 or
+# the buckets are 30% or more used.
+#
+# Note: Don't change this function.
+def check_size(item_count, bucket_size):
+    assert (bucket_size < 100 or item_count >= bucket_size * 0.3)
 
 # Test the functional behavior of the hash table.
 def functional_test():
