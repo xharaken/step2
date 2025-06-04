@@ -15,7 +15,7 @@ import random, sys, time
 # Return value: a hash value
 def calculate_hash(key):
     assert type(key) == str
-    # Note: This is not a good hash function. Do you see why?
+    # Note: This is not a good hash function. Make it better!
     hash = 0
     for i in key:
         hash += ord(i)
@@ -61,7 +61,7 @@ class HashTable:
     #               and the value is updated.
     def put(self, key, value):
         assert type(key) == str
-        check_size(self.size(), self.bucket_size)  # Note: Don't remove this code.
+        check_size(self.size(), self.bucket_size)  # Don't remove this code.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
         while item:
@@ -81,7 +81,7 @@ class HashTable:
     #               returned. Otherwise, (None, False) is returned.
     def get(self, key):
         assert type(key) == str
-        check_size(self.size(), self.bucket_size)  # Note: Don't remove this code.
+        check_size(self.size(), self.bucket_size)  # Don't remove this code.
         bucket_index = calculate_hash(key) % self.bucket_size
         item = self.buckets[bucket_index]
         while item:
