@@ -115,6 +115,7 @@ class HashTable:
 def check_size(item_count, bucket_size):
     assert (bucket_size < 100 or item_count >= bucket_size * 0.3)
 
+
 # Test the functional behavior of the hash table.
 def functional_test():
     hash_table = HashTable()
