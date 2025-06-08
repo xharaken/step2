@@ -71,8 +71,8 @@ class Wikipedia:
 
 
     # Homework #1: Find the shortest path.
-    # 'start': The title of the start page.
-    # 'goal': The title of the goal page.
+    # 'start': A title of the start page.
+    # 'goal': A title of the goal page.
     def find_shortest_path(self, start, goal):
         #------------------------#
         # Write your code here!  #
@@ -88,15 +88,32 @@ class Wikipedia:
         pass
 
 
-    # Optional homework:
+    # Homework #3 (optional):
     # Search the longest path with heuristics.
-    # 'start': The title of the start page.
-    # 'goal': The title of the goal page.
+    # 'start': A title of the start page.
+    # 'goal': A title of the goal page.
     def find_longest_path(self, start, goal):
         #------------------------#
         # Write your code here!  #
         #------------------------#
         pass
+
+
+    # Helper function for Homework #3:
+    # Please use this function to check if the found path is well formed.
+    # 'path': An array of page IDs that stores the found path.
+    #     path[0] is the start page. path[-1] is the goal page.
+    #     path[0] -> path[1] -> ... -> path[-1] is the path from the start
+    #     page to the goal page.
+    # 'start': A title of the start page.
+    # 'goal': A title of the goal page.
+    def assert_path(self, path, start, goal):
+        assert(start != goal)
+        assert(len(path) >= 2)
+        assert(self.titles[path[0]] == start)
+        assert(self.titles[path[-1]] == goal)
+        for i in range(len(path) - 1):
+            assert(path[i + 1] in self.links[path[i]])
 
 
 if __name__ == "__main__":
@@ -113,5 +130,5 @@ if __name__ == "__main__":
     wikipedia.find_shortest_path("渋谷", "パレートの法則")
     # Homework #2
     wikipedia.find_most_popular_pages()
-    # Optional homework
+    # Homework #3 (optional)
     wikipedia.find_longest_path("渋谷", "池袋")
