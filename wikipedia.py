@@ -114,6 +114,10 @@ class Wikipedia:
         assert(self.titles[path[-1]] == goal)
         for i in range(len(path) - 1):
             assert(path[i + 1] in self.links[path[i]])
+        visited = {}
+        for node in path:
+            assert(node not in visited)
+            visited[node] = True
 
 
 if __name__ == "__main__":
