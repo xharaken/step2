@@ -25,15 +25,15 @@ def sort(array):
 def binary_search(array, target):
     left = 0
     right = len(array) - 1
-    while left <= right:
+    while left < right:
         middle = int((left + right) / 2)
-        print(left, right, middle) # 0 1 0
+        print(left, right, middle)
         if array[middle] == target:
             return True
         if target < array[middle]:
-            right = middle - 1
+            right = middle
         else:
-            left = middle + 1
+            left = middle
     return False
 
 
